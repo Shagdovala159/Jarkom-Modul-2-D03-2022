@@ -162,7 +162,7 @@ service bind9 restart
 
 ping operation.wise.d03.com.
 
-8. 
+7. 
 nano /etc/bind/operation/operation.wise.d03.com
 ;
 ; BIND data file for local loopback interface
@@ -182,3 +182,5 @@ strix IN      A       192.186.2.3
 www.strix IN  CNAME   strix.operation.wise.d03.com.
 
 ping strix.operation.wise.yyy.com dan www.strix.operation.wise.yyy.com
+
+8.
