@@ -8,21 +8,22 @@
 | 2      | Wina Tungmiharja           | 5025201242 |
 | 3      | Vania Rizky Juliana Wachid | 5025201215 |
 
-
+PREFIX IP Kelompok = ```192.186```
 ## 1
+> WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Eden akan digunakan sebagai Web Server. Terdapat 2 Client yaitu SSS, dan Garden. Semua node terhubung pada router Ostania, sehingga dapat mengakses internet
 
-Ostania terhubung ke SSS dan Garden
-    Ostania
-iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.186.0.0/16
-cat /etc/resolv.conf
-    SSS
-echo nameserver 192.168.122.1 > /etc/resolv.conf
-lalu ping google.com
-    Garden
-echo nameserver 192.168.122.1 > /etc/resolv.conf
-lalu ping google.com
+Buat semua node terhubung dengan internet
+Pada Ostania ketikkan
+```iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.186.0.0/16```
+lalu ketikkan command 
+```echo nameserver 192.168.122.1 > /etc/resolv.conf```
+ke semua node agar terhubung pada internet
+coba ping google, berhasil semua maka semua node sudah terhubung dengan internet
 
-2.nano /etc/bind/named.conf.local
+## 2
+> Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan akses wise.yyy.com dengan alias www.wise.yyy.com pada folder wise
+
+nano /etc/bind/named.conf.local
 zone "wise.d03.com" {
     type master;
     file "/etc/bind/wise/wise.d03.com";
