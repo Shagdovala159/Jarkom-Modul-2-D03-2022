@@ -274,25 +274,30 @@ ping operation.wise.d03.com pada client SSS
 <img width="662" alt="Screen Shot 2022-10-26 at 4 45 42 PM" src="https://user-images.githubusercontent.com/57696730/197994063-e4b27e7e-eb06-4226-844b-6366f129bb42.png">
 ping berhasil
 
-7. 
-nano /etc/bind/operation/operation.wise.d03.com
-;
-; BIND data file for local loopback interface
-;
-$TTL    604800
-@       IN      SOA    operation.wise.d03.com. root.operation.wise.d03.com. (
-                              2021100401                ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
-;
-@       IN      NS     operation.wise.d03.com.
-@       IN      A       192.186.2.2
-www     IN      CNAME  operation.wise.d03.com.
-strix IN      A       192.186.2.3
-www.strix IN  CNAME   strix.operation.wise.d03.com.
+## 7
+>Untuk informasi yang lebih spesifik mengenai Operation Strix, buatlah subdomain melalui Berlint dengan akses strix.operation.wise.yyy.com dengan alias www.strix.operation.wise.yyy.com yang mengarah ke Eden  
 
-ping strix.operation.wise.yyy.com dan www.strix.operation.wise.yyy.com
+Pada Berlint buat domain untuk strix.operation.wise.d03.com dengan alias www.strix.operation.wise.d03.com  
+instalasi bind terlebih dahulu  
+``shell
+apt-get update
+apt-get install bind9 -y
+```
+karena sudah ada foldernya jadi tinggal edit saja.    
+Edit folder ```operation.wise.d03.com```
+``` shell
+nano /etc/bind/operation/operation.wise.d03.com
+```
+edit seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya :
+
+<img width="844" alt="Screen Shot 2022-10-26 at 5 18 23 PM" src="https://user-images.githubusercontent.com/57696730/198001543-f867584b-fdbb-4425-8c6f-752a1beb1f82.png">
+Restart
+```shell
+service bind9 restart
+```
+### Testing
+Lakukan ping ke domain strix.operation.wise.d03.com dan www.strix.operation.wise.d03.com dari client SSS
+<img width="708" alt="Screen Shot 2022-10-26 at 5 21 16 PM" src="https://user-images.githubusercontent.com/57696730/198002088-a04a61ce-6be3-4fc2-91a0-dc67d095f929.png">
+
 
 8.
