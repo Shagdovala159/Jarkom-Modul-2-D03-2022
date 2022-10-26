@@ -34,5 +34,3 @@ a2ensite eden.wise.d03
 a2ensite strix.operation.wise.d03.com-15000
 a2ensite strix.operation.wise.d03.com-15500
 cd /root
-
-service apache2 restart

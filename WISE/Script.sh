@@ -10,3 +10,6 @@ cp source/3.186.192.in-addr.arpa /etc/bind/wise/3.186.192.in-addr.arpa
 cp source/named.conf.options /etc/bind/named.conf.options
 service bind9 restart
 
+cp webserver/wise.d03.com /etc/bind/wise/wise.d03.com
+cp webserver/3.186.192.in-addr.arpa /etc/bind/wise/2.186.192.in-addr.arpa
+

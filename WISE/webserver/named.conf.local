@@ -1,0 +1,12 @@
+zone "wise.d03.com" {
+    type master;
+    notify yes;
+    also-notify { 192.186.2.2; }; // Masukan IP Berlint tanpa tanda petik
+    allow-transfer { 192.186.2.2; }; // Masukan IP Berlint tanpa tanda petik
+    file "/etc/bind/wise/wise.d03.com";
+};
+
+zone "2.186.192.in-addr.arpa" {
+    type master;
+    file "/etc/bind/wise/2.186.192.in-addr.arpa";
+};
