@@ -1,4 +1,16 @@
-1.
+# Jarkom-Modul-2-D03-2022
+
+### Kelompok D03
+
+| **No** | **Nama**                   | **NRP**    |
+| ------ | -------------------------- | ---------- |
+| 1      | Antonio Taifan Montana     | 5025201219 |
+| 2      | Wina Tungmiharja           | 5025201242 |
+| 3      | Vania Rizky Juliana Wachid | 5025201215 |
+
+
+## 1
+
 Ostania terhubung ke SSS dan Garden
     Ostania
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.186.0.0/16
