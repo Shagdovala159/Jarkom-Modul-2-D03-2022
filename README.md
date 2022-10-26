@@ -182,7 +182,7 @@ Lalu cek
 ```shell
 host -t PTR 192.186.3.2
 ```
-Maka akan muncul ini jika berhasil
+Maka akan muncul ini jika berhasil  
 <img width="502" alt="Screen Shot 2022-10-26 at 3 28 56 PM" src="https://user-images.githubusercontent.com/57696730/197975151-2565ab7b-b7cd-4aee-9970-bbfcf2597c60.png">
 
 
@@ -213,10 +213,12 @@ Pada server WISE silahkan matikan service bind9
 ```shell
 service bind9 stop
 ```
-Pada client SSS pastikan pengaturan nameserver mengarah ke IP WISE dan IP Berlint  
-<img width="254" alt="Screen Shot 2022-10-26 at 4 02 56 PM" src="https://user-images.githubusercontent.com/57696730/197983574-f9239e31-57fb-45c8-9d5a-f73a74556081.png">
-Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfigurasi DNS slave telah berhasil  
-<img width="588" alt="Screen Shot 2022-10-26 at 4 03 36 PM" src="https://user-images.githubusercontent.com/57696730/197983739-55a381ee-6fb9-4638-8083-ea0d3f6d9428.png">
+Pada client SSS pastikan pengaturan nameserver mengarah ke IP WISE dan IP Berlint    
+<img width="254" alt="Screen Shot 2022-10-26 at 4 02 56 PM" src="https://user-images.githubusercontent.com/57696730/197983574-f9239e31-57fb-45c8-9d5a-f73a74556081.png">  
+
+Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfigurasi DNS slave telah berhasil    
+<img width="588" alt="Screen Shot 2022-10-26 at 4 03 36 PM" src="https://user-images.githubusercontent.com/57696730/197983739-55a381ee-6fb9-4638-8083-ea0d3f6d9428.png">  
+
 Slave telah berhasil dibuat.  
 
 ## 6.
@@ -228,18 +230,21 @@ Pada WISE tambahkan line baru pada file wise.d03.com
 nano /etc/bind/wise/wise.d03.com
 ```
 Edit seperti :  
-<img width="609" alt="Screen Shot 2022-10-26 at 4 09 31 PM" src="https://user-images.githubusercontent.com/57696730/197985168-737063bc-066d-4941-8984-aaf2f4b5a274.png">
-Kemudian edit file /etc/bind/named.conf.options pada WISE seperti ini :
-<img width="460" alt="Screen Shot 2022-10-26 at 4 18 23 PM" src="https://user-images.githubusercontent.com/57696730/197987744-4c45e1d3-9264-4bfe-950b-133ad9fd01d3.png">
-Kemudian edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:  
-<img width="645" alt="Screen Shot 2022-10-26 at 4 20 45 PM" src="https://user-images.githubusercontent.com/57696730/197988336-93bdb6dc-2a09-4f10-8d81-9d47603063bd.png">
+<img width="609" alt="Screen Shot 2022-10-26 at 4 09 31 PM" src="https://user-images.githubusercontent.com/57696730/197985168-737063bc-066d-4941-8984-aaf2f4b5a274.png">  
+
+Kemudian edit file /etc/bind/named.conf.options pada WISE seperti ini :  
+<img width="460" alt="Screen Shot 2022-10-26 at 4 18 23 PM" src="https://user-images.githubusercontent.com/57696730/197987744-4c45e1d3-9264-4bfe-950b-133ad9fd01d3.png">  
+
+Kemudian edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:   
+<img width="645" alt="Screen Shot 2022-10-26 at 4 20 45 PM" src="https://user-images.githubusercontent.com/57696730/197988336-93bdb6dc-2a09-4f10-8d81-9d47603063bd.png">  
+
 restart bind9  
 ```shell
 service bind9 restart
 ```
 
 ### Konfigurasi pada server Berlint
-Pada Berlint edit file /etc/bind/named.conf.options
+Pada Berlint edit file /etc/bind/named.conf.options  
 ```shell
 nano /etc/bind/named.conf.options
 ```
@@ -247,31 +252,35 @@ Kemudian comment ```dnssec-validation auto;``` dan tambahkan baris berikut pada 
 ```shell
 allow-query{any;};
 ```
-seperti pada gambar ini:
-<img width="471" alt="Screen Shot 2022-10-26 at 4 23 57 PM" src="https://user-images.githubusercontent.com/57696730/197989056-5c768eee-514b-4692-9bf2-336f65f34885.png">
+seperti pada gambar ini:  
+<img width="471" alt="Screen Shot 2022-10-26 at 4 23 57 PM" src="https://user-images.githubusercontent.com/57696730/197989056-5c768eee-514b-4692-9bf2-336f65f34885.png">  
+
 Lalu edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:  
-<img width="626" alt="Screen Shot 2022-10-26 at 4 25 45 PM" src="https://user-images.githubusercontent.com/57696730/197989464-d313762e-f474-4884-ab9f-3fb218185158.png">
-Buat folder operation
+<img width="626" alt="Screen Shot 2022-10-26 at 4 25 45 PM" src="https://user-images.githubusercontent.com/57696730/197989464-d313762e-f474-4884-ab9f-3fb218185158.png">  
+
+Buat folder operation  
 ```shell
 mkdir /etc/bind/operation
 ```
-Copy db.local ke operation.wise.d03.com
+Copy db.local ke operation.wise.d03.com  
 ```shell
 cp /etc/bind/db.local /etc/bind/operation/operation.wise.d03.com
 ```
-Edit isinya seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya
+Edit isinya seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya  
 ```shell
 nano /etc/bind/operation/operation.wise.d03.com
 ```
-<img width="819" alt="Screen Shot 2022-10-26 at 4 31 31 PM" src="https://user-images.githubusercontent.com/57696730/197990815-3a397704-0831-46f9-8b74-ff0326484ec8.png">
-Restart
+<img width="819" alt="Screen Shot 2022-10-26 at 4 31 31 PM" src="https://user-images.githubusercontent.com/57696730/197990815-3a397704-0831-46f9-8b74-ff0326484ec8.png">  
+
+Restart  
 ```shell
 service bind9 restart
 ```
 ### Testing
 
 ping operation.wise.d03.com pada client SSS
-<img width="662" alt="Screen Shot 2022-10-26 at 4 45 42 PM" src="https://user-images.githubusercontent.com/57696730/197994063-e4b27e7e-eb06-4226-844b-6366f129bb42.png">
+<img width="662" alt="Screen Shot 2022-10-26 at 4 45 42 PM" src="https://user-images.githubusercontent.com/57696730/197994063-e4b27e7e-eb06-4226-844b-6366f129bb42.png">  
+
 ping berhasil
 
 ## 7
@@ -279,7 +288,7 @@ ping berhasil
 
 Pada Berlint buat domain untuk strix.operation.wise.d03.com dengan alias www.strix.operation.wise.d03.com  
 instalasi bind terlebih dahulu  
-``shell
+```shell
 apt-get update
 apt-get install bind9 -y
 ```
@@ -290,8 +299,9 @@ nano /etc/bind/operation/operation.wise.d03.com
 ```
 edit seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya :
 
-<img width="844" alt="Screen Shot 2022-10-26 at 5 18 23 PM" src="https://user-images.githubusercontent.com/57696730/198001543-f867584b-fdbb-4425-8c6f-752a1beb1f82.png">
-Restart
+<img width="844" alt="Screen Shot 2022-10-26 at 5 18 23 PM" src="https://user-images.githubusercontent.com/57696730/198001543-f867584b-fdbb-4425-8c6f-752a1beb1f82.png">  
+
+Restart  
 ```shell
 service bind9 restart
 ```
