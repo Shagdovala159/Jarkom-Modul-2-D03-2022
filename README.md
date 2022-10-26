@@ -9,6 +9,31 @@
 | 3      | Vania Rizky Juliana Wachid | 5025201215 |
 
 ```PREFIX IP Kelompok = 192.186```  
+
+### Direktori Jawaban
+
+<details>
+  <summary>Expand</summary>
+  
+ 1. [Nomor 1](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#1)
+ 2. [Nomor 2](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#2)
+ 3. [Nomor 3](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#3)
+ 4. [Nomor 4](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#4)
+ 5. [Nomor 5](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#5)
+ 6. [Nomor 6](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#6)
+ 7. [Nomor 7](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#7)
+ 8. [Nomor 8](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#8)
+ 9. [Nomor 9](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#9)
+ 10. [Nomor 10](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#10)
+ 11. [Nomor 11](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#11)
+ 12. [Nomor 12](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#12)
+ 13. [Nomor 13](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#13)
+ 14. [Nomor 14](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#14)
+ 15. [Nomor 15](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#15)
+ 16. [Nomor 16](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#16)
+ 17. [Nomor 17](https://github.com/Shagdovala159/Jarkom-Modul-2-D03-2022/#17)
+</details>
+ 
  
 ## 1
 
