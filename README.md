@@ -8,7 +8,8 @@
 | 2      | Wina Tungmiharja           | 5025201242 |
 | 3      | Vania Rizky Juliana Wachid | 5025201215 |
 
-
+```PREFIX IP Kelompok = 192.186```  
+ 
 ## 1
 
 > WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Eden akan digunakan sebagai Web Server. 
@@ -16,22 +17,20 @@ Terdapat 2 Client yaitu SSS, dan Garden. Semua node terhubung pada router Ostani
 
 **Ostania**
 
-- Foosha untuk node agar dapat terhubung
+- Command agar semua node dapat terhubung internet
 ```shell
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.186.0.0/16
+```
+Cek IP DNS dengan mengetikkan command  
+```shell
 cat /etc/resolv.conf
-```
-
-**SSS**
+```  
+Lalu ketikkan command   
 ```shell
 echo nameserver 192.168.122.1 > /etc/resolv.conf
-```
-
-**Garden**
-```shell
-echo nameserver 192.168.122.1 > /etc/resolv.conf
-```
-
+```  
+ke semua node agar terhubung pada internet 
+Cek menggunakan ping google  
 Hasil ping ke `google.com`
 ![collage](https://user-images.githubusercontent.com/64743796/197951880-46fc88dd-acc6-42ed-9aee-7abeb9c79e9a.jpg)
 
@@ -41,13 +40,17 @@ Hasil ping ke `google.com`
 > Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan 
 akses `wise.yyy.com` dengan alias `www.wise.yyy.com` pada folder wise `yyy pada url = D03`
 
-- buat domain untuk `wise.yyy.com` dan `www.wise.yyy.com.`
-
-- menggunakan `nano` untuk mengedit
+- buat domain untuk `wise.yyy.com` lalu menggunakan CNAME untuk `www.wise.yyy.com.`
+-Instalasi bind terlebih dahulu  
+``` shell
+apt-get update
+apt-get install bind9 -y
+```
+- menggunakan `nano` untuk mengedit ```named.conf.local```
 ```shell
 nano /etc/bind/named.conf.local
 ```
-
+Lalu isikan dengan:  
 ```shell
 zone "wise.d03.com" {
     type master;
@@ -55,15 +58,14 @@ zone "wise.d03.com" {
 };
 ```
 
-- buka dblocal dan copy menggunakan cp ke root folder `wise.d03.com` 
-dan edit isinya seperti berikut lalu copy ke `/etc/bind/wise/wise.d03.com`
+- copy dvlocal menggunakan cp ke root folder wise `wise.d03.com` 
 
 ```shell
 mkdir /etc/bind/wise
 cp /etc/bind/db.local /etc/bind/wise/wise.d03.com
 nano /etc/bind/wise/wise.d03.com
 ```
-
+-edit isinya seperti berikut, ganti menggunakan IP dari ```WISE```, jangan lupa tambahkan CNAME untuk aliasnya
 ```shell
 ;
 ; BIND data file for local loopback interface
@@ -78,7 +80,7 @@ $TTL    604800
 ;
 @       IN      NS      wise.d03.com.
 @       IN      A       192.186.3.2
-@       IN      AAAA    wise.d03.com.
+www     IN      CNAME   wise.d03.com.
 ```
 - lakukan `service bind9 restart` pada kedua node
 
