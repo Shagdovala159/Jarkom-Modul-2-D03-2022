@@ -134,7 +134,8 @@ Hasil ping ke `eden.wise.d03.com`
 ![Screenshot 2022-10-25 033111](https://user-images.githubusercontent.com/64743796/197957248-cb4ba53d-40e0-490c-a227-cd44d3e9b937.png)
 
 
-4.
+## 4
+
 Edit file /etc/bind/named.conf.local pada WISE
 ```shell
 nano /etc/bind/named.conf.local
@@ -183,40 +184,47 @@ Lalu cek
 host -t PTR 192.186.3.2
 ```
 Maka akan muncul ini jika berhasil  
+
 <img width="502" alt="Screen Shot 2022-10-26 at 3 28 56 PM" src="https://user-images.githubusercontent.com/57696730/197975151-2565ab7b-b7cd-4aee-9970-bbfcf2597c60.png">
 
 
 ## 5.
 > Agar dapat tetap dihubungi jika server WISE bermasalah, buatlah juga Berlint sebagai DNS Slave untuk domain utama
 
-### Konfigurasi server WISE
+*Konfigurasi server WISE*
 Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut  
+
 <img width="527" alt="Screen Shot 2022-10-26 at 3 59 55 PM" src="https://user-images.githubusercontent.com/57696730/197982884-fa9981b6-74e6-41d1-9969-72630322b174.png">
+
 Lakukan restart bind9  
 ```shell
 service bind9 restart
 ```
-### Konfigurasi server Berlint
+*Konfigurasi server Berlint*
 install bind  
 ```shell
 apt-get update
 apt-get install bind9 -y
 ```
 Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut
+
 <img width="473" alt="Screen Shot 2022-10-26 at 4 01 26 PM" src="https://user-images.githubusercontent.com/57696730/197983227-2695bf6a-5180-4fcf-b194-39ab07e67b00.png">
+
 Lakukan restart bind9  
 ```shell
 service bind9 restart
 ```
-### Testing
+*Testing*
 Pada server WISE silahkan matikan service bind9
 ```shell
 service bind9 stop
 ```
-Pada client SSS pastikan pengaturan nameserver mengarah ke IP WISE dan IP Berlint    
+Pada client SSS pastikan pengaturan nameserver mengarah ke IP WISE dan IP Berlint   
+
 <img width="254" alt="Screen Shot 2022-10-26 at 4 02 56 PM" src="https://user-images.githubusercontent.com/57696730/197983574-f9239e31-57fb-45c8-9d5a-f73a74556081.png">  
 
-Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfigurasi DNS slave telah berhasil    
+Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfigurasi DNS slave telah berhasil   
+
 <img width="588" alt="Screen Shot 2022-10-26 at 4 03 36 PM" src="https://user-images.githubusercontent.com/57696730/197983739-55a381ee-6fb9-4638-8083-ea0d3f6d9428.png">  
 
 Slave telah berhasil dibuat.  
@@ -224,18 +232,21 @@ Slave telah berhasil dibuat.
 ## 6.
 > Karena banyak informasi dari Handler, buatlah subdomain yang khusus untuk operation yaitu operation.wise.yyy.com dengan alias www.operation.wise.yyy.com yang didelegasikan dari WISE ke Berlint dengan IP menuju ke Eden dalam folder operation 
 
-### Konfigurasi pada server WISE
+*Konfigurasi pada server WISE*
 Pada WISE tambahkan line baru pada file wise.d03.com
 ```shell
 nano /etc/bind/wise/wise.d03.com
 ```
 Edit seperti :  
+
 <img width="609" alt="Screen Shot 2022-10-26 at 4 09 31 PM" src="https://user-images.githubusercontent.com/57696730/197985168-737063bc-066d-4941-8984-aaf2f4b5a274.png">  
 
 Kemudian edit file /etc/bind/named.conf.options pada WISE seperti ini :  
+
 <img width="460" alt="Screen Shot 2022-10-26 at 4 18 23 PM" src="https://user-images.githubusercontent.com/57696730/197987744-4c45e1d3-9264-4bfe-950b-133ad9fd01d3.png">  
 
 Kemudian edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:   
+
 <img width="645" alt="Screen Shot 2022-10-26 at 4 20 45 PM" src="https://user-images.githubusercontent.com/57696730/197988336-93bdb6dc-2a09-4f10-8d81-9d47603063bd.png">  
 
 restart bind9  
@@ -243,7 +254,8 @@ restart bind9
 service bind9 restart
 ```
 
-### Konfigurasi pada server Berlint
+*Konfigurasi pada server Berlint*
+
 Pada Berlint edit file /etc/bind/named.conf.options  
 ```shell
 nano /etc/bind/named.conf.options
@@ -253,9 +265,11 @@ Kemudian comment ```dnssec-validation auto;``` dan tambahkan baris berikut pada 
 allow-query{any;};
 ```
 seperti pada gambar ini:  
+
 <img width="471" alt="Screen Shot 2022-10-26 at 4 23 57 PM" src="https://user-images.githubusercontent.com/57696730/197989056-5c768eee-514b-4692-9bf2-336f65f34885.png">  
 
 Lalu edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:  
+
 <img width="626" alt="Screen Shot 2022-10-26 at 4 25 45 PM" src="https://user-images.githubusercontent.com/57696730/197989464-d313762e-f474-4884-ab9f-3fb218185158.png">  
 
 Buat folder operation  
@@ -270,21 +284,23 @@ Edit isinya seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya
 ```shell
 nano /etc/bind/operation/operation.wise.d03.com
 ```
+
 <img width="819" alt="Screen Shot 2022-10-26 at 4 31 31 PM" src="https://user-images.githubusercontent.com/57696730/197990815-3a397704-0831-46f9-8b74-ff0326484ec8.png">  
 
 Restart  
 ```shell
 service bind9 restart
 ```
-### Testing
+*Testing*
 
 ping operation.wise.d03.com pada client SSS
+
 <img width="662" alt="Screen Shot 2022-10-26 at 4 45 42 PM" src="https://user-images.githubusercontent.com/57696730/197994063-e4b27e7e-eb06-4226-844b-6366f129bb42.png">  
 
 ping berhasil
 
 ## 7
->Untuk informasi yang lebih spesifik mengenai Operation Strix, buatlah subdomain melalui Berlint dengan akses strix.operation.wise.yyy.com dengan alias www.strix.operation.wise.yyy.com yang mengarah ke Eden  
+> Untuk informasi yang lebih spesifik mengenai Operation Strix, buatlah subdomain melalui Berlint dengan akses strix.operation.wise.yyy.com dengan alias www.strix.operation.wise.yyy.com yang mengarah ke Eden  
 
 Pada Berlint buat domain untuk strix.operation.wise.d03.com dengan alias www.strix.operation.wise.d03.com  
 instalasi bind terlebih dahulu  
@@ -305,9 +321,78 @@ Restart
 ```shell
 service bind9 restart
 ```
-### Testing
+*Testing*
+
 Lakukan ping ke domain strix.operation.wise.d03.com dan www.strix.operation.wise.d03.com dari client SSS
+
 <img width="708" alt="Screen Shot 2022-10-26 at 5 21 16 PM" src="https://user-images.githubusercontent.com/57696730/198002088-a04a61ce-6be3-4fc2-91a0-dc67d095f929.png">
 
 
-8.
+## 8
+
+> Setelah melakukan konfigurasi server, maka dilakukan konfigurasi Webserver. Pertama dengan webserver www.wise.yyy.com. Pertama, Loid membutuhkan webserver dengan DocumentRoot pada `/var/www/wise.yyy.com`
+
+- Config WISE diarahkan ke Skypie
+![Screenshot 2022-10-26 013232](https://user-images.githubusercontent.com/64743796/198028646-10e78659-901f-4105-887d-4ce9f87dfe69.png)
+
+![Screenshot 2022-10-26 013543](https://user-images.githubusercontent.com/64743796/198028620-eafebc77-7b5b-4cba-8dde-d7abd5ad6ebb.png)
+
+
+## 9
+
+> Setelah itu, Loid juga membutuhkan agar url `www.wise.yyy.com/index.php/home` dapat menjadi menjadi `www.wise.yyy.com/home`
+
+- Pertama kita harus membuat alias dari dari `/home` menjadi `/index.php/home`
+
+```shell
+<VirtualHost *:80>
+        ...
+        ServerName wise.d03.com
+        ServerAlias www.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/wise.d03.com
+
+        Alias "/home" "/var/www/wise.d03.com/index.php/home"
+
+        ...
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ...
+</VirtualHost>
+
+```
+
+- `lynx http://wise.d03.com/home`
+
+![Screenshot 2022-10-26 033543](https://user-images.githubusercontent.com/64743796/198031302-cf42b628-a0cc-406f-8829-d072322d198f.png)
+
+## 10
+
+> Setelah itu, pada subdomain www.eden.wise.yyy.com, Loid membutuhkan penyimpanan aset yang memiliki DocumentRoot pada /var/www/eden.wise.yyy.com
+
+```shell
+<VirtualHost *:80>
+        ...
+        ServerName eden.wise.d03.com
+        ServerAlias www.eden.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.d03.com
+
+        ...
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ...
+</VirtualHost>
+
+```
+
+`lynx http://www.eden.wise.d03.com`
+
+![Screenshot 2022-10-26 035549](https://user-images.githubusercontent.com/64743796/198032744-6dd40343-2ea6-4728-a324-0dc466f7ecab.png)
+
