@@ -97,7 +97,7 @@ Hasil ping ke `wise.d03.com`
 - buka `/etc/bind/wise/wise.d03.com`
 
 ```shell
-wise nano /etc/bind/wise/wise.d03.com
+nano /etc/bind/wise/wise.d03.com
 ```
 - tambahkan line baru
 ```shell
@@ -135,41 +135,56 @@ Hasil ping ke `eden.wise.d03.com`
 
 
 4.
-pada WISE tambahkan nano /etc/bind/named.conf.local
+Edit file /etc/bind/named.conf.local pada WISE
+```shell
+nano /etc/bind/named.conf.local
+```
+Tambahkan reverse dari 3 byte awal dari IP yang ingin dilakukan Reverse DNS  
+```shell
 zone "3.186.192.in-addr.arpa" {
     type master;
     file "/etc/bind/wise/3.186.192.in-addr.arpa";
 };
+```
 
+<img width="620" alt="Screen Shot 2022-10-26 at 3 08 35 PM" src="https://user-images.githubusercontent.com/57696730/197970584-16683041-db40-4eba-8ba9-ced569c3dc35.png">
+
+Copykan file db.local pada path /etc/bind ke dalam folder jarkom yang baru saja dibuat dan ubah namanya menjadi ```3.186.192.in-addr.arpa```  
+```shell
 cp /etc/bind/db.local /etc/bind/wise/3.186.192.in-addr.arpa
+```  
+Edit file 3.186.192.in-addr.arpa 
+```shell
 nano /etc/bind/wise/3.186.192.in-addr.arpa
+```
+Lalu ganti seperti pada :  
 
-;
-; BIND data file for local loopback interface
-;
-$TTL	604800
-@	IN	SOA	wise.d03.com. root.wise.d03.com. (
-			2		; Serial
-			 604800		; Refresh
-			  86400		; Retry
-			2419200		; Expire
-			 604800 )	; Negative Cache TTL
-;
-3.186.192.in-addr.arpa. IN	NS	wise.d03.com.
-2			IN	PTR	wise.d03.com.
+<img width="605" alt="Screen Shot 2022-10-26 at 3 26 41 PM" src="https://user-images.githubusercontent.com/57696730/197974667-384e13d7-97d5-4d28-8cfc-b5122ebb93ce.png">
 
+Lalu restart  
+```shell
 service bind9 restart
-
-Untuk mengecek apakah konfigurasi sudah benar atau belum, lakukan perintah berikut pada client SSS
-
-// Install package dnsutils
-// Pastikan nameserver di /etc/resolv.conf telah dikembalikan sama dengan nameserver dari Ostania
+```
+Untuk mengecek apakah konfigurasi sudah benar atau belum, lakukan perintah berikut pada client SSS  
+```shell
 apt-get update
 apt-get install dnsutils
-
-//Kembalikan nameserver agar tersambung dengan EniesLobby
-nano /etc/resolv.conf 192.186.3.2
+```
+Kembalikan nameserver di /etc/resolv.conf agar tersambung dengan WISE  
+```shell
+nano /etc/resolv.conf
+```
+Ganti dengan  
+```shell
+nameserver	192.186.3.2
+```
+Lalu cek  
+```shell
 host -t PTR 192.186.3.2
+```
+Maka akan muncul ini jika berhasil
+<img width="502" alt="Screen Shot 2022-10-26 at 3 28 56 PM" src="https://user-images.githubusercontent.com/57696730/197975151-2565ab7b-b7cd-4aee-9970-bbfcf2597c60.png">
+
 
 5.
 nano /etc/bind/named.conf.local
