@@ -11,25 +11,60 @@
 
 ## 1
 
-Ostania terhubung ke SSS dan Garden
-    Ostania
+> WISE akan dijadikan sebagai DNS Master, Berlint akan dijadikan DNS Slave, dan Eden akan digunakan sebagai Web Server. 
+Terdapat 2 Client yaitu SSS, dan Garden. Semua node terhubung pada router Ostania, sehingga dapat mengakses internet
+
+**Ostania**
+
+- Foosha untuk node agar dapat terhubung
+```shell
 iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE -s 192.186.0.0/16
 cat /etc/resolv.conf
-    SSS
-echo nameserver 192.168.122.1 > /etc/resolv.conf
-lalu ping google.com
-    Garden
-echo nameserver 192.168.122.1 > /etc/resolv.conf
-lalu ping google.com
+```
 
-2.nano /etc/bind/named.conf.local
+**SSS**
+```shell
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+```
+
+**Garden**
+```shell
+echo nameserver 192.168.122.1 > /etc/resolv.conf
+```
+
+Hasil ping ke `google.com`
+![collage](https://user-images.githubusercontent.com/64743796/197951880-46fc88dd-acc6-42ed-9aee-7abeb9c79e9a.jpg)
+
+
+## 2
+
+> Untuk mempermudah mendapatkan informasi mengenai misi dari Handler, bantulah Loid membuat website utama dengan 
+akses `wise.yyy.com` dengan alias `www.wise.yyy.com` pada folder wise `yyy pada url = D03`
+
+- buat domain untuk `wise.yyy.com` dan `www.wise.yyy.com.`
+
+- menggunakan `nano` untuk mengedit
+```shell
+nano /etc/bind/named.conf.local
+```
+
+```shell
 zone "wise.d03.com" {
     type master;
     file "/etc/bind/wise/wise.d03.com";
 };
+```
+
+- buka dblocal dan copy menggunakan cp ke root folder `wise.d03.com` 
+dan edit isinya seperti berikut lalu copy ke `/etc/bind/wise/wise.d03.com`
+
+```shell
 mkdir /etc/bind/wise
 cp /etc/bind/db.local /etc/bind/wise/wise.d03.com
 nano /etc/bind/wise/wise.d03.com
+```
+
+```shell
 ;
 ; BIND data file for local loopback interface
 ;
@@ -43,10 +78,33 @@ $TTL    604800
 ;
 @       IN      NS      wise.d03.com.
 @       IN      A       192.186.3.2
-@       IN      AAAA    wise.d03.com
+@       IN      AAAA    wise.d03.com.
+```
+- lakukan `service bind9 restart` pada kedua node
 
-3.
+Hasil ping ke `wise.d03.com`
+
+![Screenshot 2022-10-25 032449](https://user-images.githubusercontent.com/64743796/197955389-7ddbeba4-0237-4826-bdd4-4c6615d8e28d.png)
+
+
+## 3
+
+> Setelah itu ia juga ingin membuat subdomain `eden.wise.yyy.com` dengan alias 
+`www.eden.wise.yyy.com` yang diatur DNS-nya di WISE dan mengarah ke Eden
+
+- buka `/etc/bind/wise/wise.d03.com`
+
+```shell
 wise nano /etc/bind/wise/wise.d03.com
+```
+- tambahkan line baru
+```shell
+eden   IN      A       192.186.2.3
+www.eden IN    CNAME   eden.wise.d03.com.
+```
+
+- menjadi seperti ini
+```shell
 ;
 ; BIND data file for local loopback interface
 ;
@@ -63,6 +121,16 @@ $TTL    604800
 www     IN      CNAME   wise.d03.com.
 eden   IN      A       192.186.2.3
 www.eden IN    CNAME   eden.wise.d03.com.
+```
+
+![Screenshot 2022-10-25 032941](https://user-images.githubusercontent.com/64743796/197957121-59fb1d3c-1354-4460-ab59-eb61d2b59869.png)
+
+- lakukan `service bind9 restart` pada node
+
+Hasil ping ke `eden.wise.d03.com`
+
+![Screenshot 2022-10-25 033111](https://user-images.githubusercontent.com/64743796/197957248-cb4ba53d-40e0-490c-a227-cd44d3e9b937.png)
+
 
 4.
 pada WISE tambahkan nano /etc/bind/named.conf.local
