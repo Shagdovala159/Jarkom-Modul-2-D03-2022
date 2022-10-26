@@ -187,14 +187,37 @@ Maka akan muncul ini jika berhasil
 
 
 5.
-nano /etc/bind/named.conf.local
-zone "wise.d03.com" {
-    type master;
-    notify yes;
-    also-notify { 192.186.2.2; }; // Masukan IP Berlint tanpa tanda petik
-    allow-transfer { 192.186.2.2; }; // Masukan IP Berlint tanpa tanda petik
-    file "/etc/bind/wise/wise.d03.com";
-};
+> Agar dapat tetap dihubungi jika server WISE bermasalah, buatlah juga Berlint sebagai DNS Slave untuk domain utama
+
+### Konfigurasi server WISE
+Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut  
+<img width="527" alt="Screen Shot 2022-10-26 at 3 59 55 PM" src="https://user-images.githubusercontent.com/57696730/197982884-fa9981b6-74e6-41d1-9969-72630322b174.png">
+Lakukan restart bind9  
+```shell
+service bind9 restart
+```
+### Konfigurasi server Berlint
+install bind  
+```shell
+apt-get update
+apt-get install bind9 -y
+```
+Edit file /etc/bind/named.conf.local dan sesuaikan dengan syntax berikut
+<img width="473" alt="Screen Shot 2022-10-26 at 4 01 26 PM" src="https://user-images.githubusercontent.com/57696730/197983227-2695bf6a-5180-4fcf-b194-39ab07e67b00.png">
+Lakukan restart bind9  
+```shell
+service bind9 restart
+```
+### Testing
+Pada server WISE silahkan matikan service bind9
+```shell
+service bind9 stop
+```
+Pada client SSS pastikan pengaturan nameserver mengarah ke IP WISE dan IP Berlint  
+<img width="254" alt="Screen Shot 2022-10-26 at 4 02 56 PM" src="https://user-images.githubusercontent.com/57696730/197983574-f9239e31-57fb-45c8-9d5a-f73a74556081.png">
+Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfigurasi DNS slave telah berhasil  
+<img width="588" alt="Screen Shot 2022-10-26 at 4 03 36 PM" src="https://user-images.githubusercontent.com/57696730/197983739-55a381ee-6fb9-4638-8083-ea0d3f6d9428.png">
+Slave telah berhasil dibuat.  
 
 6.
 nano /etc/bind/wise/wise.d03.com
