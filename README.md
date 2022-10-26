@@ -186,7 +186,7 @@ Maka akan muncul ini jika berhasil
 <img width="502" alt="Screen Shot 2022-10-26 at 3 28 56 PM" src="https://user-images.githubusercontent.com/57696730/197975151-2565ab7b-b7cd-4aee-9970-bbfcf2597c60.png">
 
 
-5.
+## 5.
 > Agar dapat tetap dihubungi jika server WISE bermasalah, buatlah juga Berlint sebagai DNS Slave untuk domain utama
 
 ### Konfigurasi server WISE
@@ -219,68 +219,60 @@ Lakukan ping ke wise.d03.com pada client SSS. Jika ping berhasil maka konfiguras
 <img width="588" alt="Screen Shot 2022-10-26 at 4 03 36 PM" src="https://user-images.githubusercontent.com/57696730/197983739-55a381ee-6fb9-4638-8083-ea0d3f6d9428.png">
 Slave telah berhasil dibuat.  
 
-6.
+## 6.
+> Karena banyak informasi dari Handler, buatlah subdomain yang khusus untuk operation yaitu operation.wise.yyy.com dengan alias www.operation.wise.yyy.com yang didelegasikan dari WISE ke Berlint dengan IP menuju ke Eden dalam folder operation 
+
+### Konfigurasi pada server WISE
+Pada WISE tambahkan line baru pada file wise.d03.com
+```shell
 nano /etc/bind/wise/wise.d03.com
-;
-; BIND data file for local loopback interface
-;
-$TTL    604800
-@       IN      SOA	wise.d03.com. root.wise.d03.com. (
-                     2021100401         ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
-;
-@       IN      NS      wise.d03.com.
-@       IN      A       192.186.3.2
-www     IN      CNAME   wise.d03.com.
-eden   IN      A       192.186.2.3
-www.eden IN    CNAME   eden.wise.d03.com.
-operation   IN      NS      ns1
-
-Kemudian, melakukan pengeditan pada named.conf.options dnnsec, dan menambahkan allow-query{any;};
-
-nano /etc/bind/named.conf.options
-tambahkan // ke dnssec-validation auto;
-allow-query{any;};
-
-pada Berlint
-nano /etc/bind/named.conf.local
-// SLAVE
-zone "wise.d03.com" {
-    type slave;
-    masters { 192.186.3.2; }; // Masukan IP WISE tanpa tanda petik
-    file "/var/lib/bind/wise.d03.com";
-};
-
-// DELEGASI
-zone "operation.wise.d03.com" {
-    type master;
-    file "/etc/bind/operation/operation.wise.d03.com"
-};
-
-mkdir /etc/bind/operation
-cp /etc/bind/db.local /etc/bind/operation/operation.wise.d03.com
-nano /etc/bind/operation/operation.wise.d03.com
-;
-; BIND data file for local loopback interface
-;
-$TTL    604800
-@       IN      SOA     operation.wise.d03.com. root.operation.wise.d03.com. (
-                              2021100401                ; Serial
-                         604800         ; Refresh
-                          86400         ; Retry
-                        2419200         ; Expire
-                         604800 )       ; Negative Cache TTL
-;
-@       IN      NS      operation.wise.d03.com.
-@       IN      A       192.186.2.2
-www     IN      CNAME   operation.wise.d03.com.
-
+```
+Edit seperti :  
+<img width="609" alt="Screen Shot 2022-10-26 at 4 09 31 PM" src="https://user-images.githubusercontent.com/57696730/197985168-737063bc-066d-4941-8984-aaf2f4b5a274.png">
+Kemudian edit file /etc/bind/named.conf.options pada WISE seperti ini :
+<img width="460" alt="Screen Shot 2022-10-26 at 4 18 23 PM" src="https://user-images.githubusercontent.com/57696730/197987744-4c45e1d3-9264-4bfe-950b-133ad9fd01d3.png">
+Kemudian edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:  
+<img width="645" alt="Screen Shot 2022-10-26 at 4 20 45 PM" src="https://user-images.githubusercontent.com/57696730/197988336-93bdb6dc-2a09-4f10-8d81-9d47603063bd.png">
+restart bind9  
+```shell
 service bind9 restart
+```
 
-ping operation.wise.d03.com.
+### Konfigurasi pada server Berlint
+Pada Berlint edit file /etc/bind/named.conf.options
+```shell
+nano /etc/bind/named.conf.options
+```
+Kemudian comment ```dnssec-validation auto;``` dan tambahkan baris berikut pada /etc/bind/named.conf.options  
+```shell
+allow-query{any;};
+```
+seperti pada gambar ini:
+<img width="471" alt="Screen Shot 2022-10-26 at 4 23 57 PM" src="https://user-images.githubusercontent.com/57696730/197989056-5c768eee-514b-4692-9bf2-336f65f34885.png">
+Lalu edit file /etc/bind/named.conf.local menjadi seperti gambar di bawah:  
+<img width="626" alt="Screen Shot 2022-10-26 at 4 25 45 PM" src="https://user-images.githubusercontent.com/57696730/197989464-d313762e-f474-4884-ab9f-3fb218185158.png">
+Buat folder operation
+```shell
+mkdir /etc/bind/operation
+```
+Copy db.local ke operation.wise.d03.com
+```shell
+cp /etc/bind/db.local /etc/bind/operation/operation.wise.d03.com
+```
+Edit isinya seperti dibawah ini, jangan lupa tambahkan CNAME untuk aliasnya
+```shell
+nano /etc/bind/operation/operation.wise.d03.com
+```
+<img width="819" alt="Screen Shot 2022-10-26 at 4 31 31 PM" src="https://user-images.githubusercontent.com/57696730/197990815-3a397704-0831-46f9-8b74-ff0326484ec8.png">
+Restart
+```shell
+service bind9 restart
+```
+### Testing
+
+ping operation.wise.d03.com pada client SSS
+<img width="662" alt="Screen Shot 2022-10-26 at 4 45 42 PM" src="https://user-images.githubusercontent.com/57696730/197994063-e4b27e7e-eb06-4226-844b-6366f129bb42.png">
+ping berhasil
 
 7. 
 nano /etc/bind/operation/operation.wise.d03.com
