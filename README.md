@@ -421,3 +421,76 @@ Lakukan ping ke domain strix.operation.wise.d03.com dan www.strix.operation.wise
 
 ![Screenshot 2022-10-26 035549](https://user-images.githubusercontent.com/64743796/198032744-6dd40343-2ea6-4728-a324-0dc466f7ecab.png)
 
+
+## 11
+
+> Akan tetapi, pada folder /public, Loid ingin hanya dapat melakukan directory listing saja
+
+- akses folder webserver pada skypie dan lakukan pengeditan
+- menambah directory dan option +indexes
+
+```shell
+<VirtualHost *:80>
+        ...
+
+        <Directory /var/www/eden.wise.d03.com/public>
+                Options +Indexes
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ...
+</VirtualHost>
+
+```
+
+`lynx http://www.eden.wise.d03.com/public`
+
+![Screenshot 2022-10-26 035550](https://user-images.githubusercontent.com/64743796/199222917-c8c808a4-d8bd-4cc4-a3d6-b9490c961095.png)
+
+
+## 12
+
+> Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder /error untuk mengganti error kode pada apache
+
+- akses folder webserver pada skypie dan lakukan pengeditan
+- menambah custom error document
+
+```shell
+<VirtualHost *:80>
+        ...
+        
+        ErrorDocument 404 /error/404.html
+
+        ...
+</VirtualHost>
+
+```
+
+`lynx http://www.eden.wise.d03.com/errorgakya`
+
+![Screenshot 2022-10-26 035551](https://user-images.githubusercontent.com/64743796/199223681-2a6bdb6e-d672-40f8-a679-fdc19516156f.png)
+
+
+## 13
+
+> Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses 
+file asset `www.eden.wise.yyy.com/public/js` menjadi `www.eden.wise.yyy.com/js`
+
+- akses folder webserver pada skypie dan lakukan pengeditan
+- menambahkan alias
+
+```shell
+<VirtualHost *:80>
+        ...
+        
+        Alias "/js" "/var/www/eden.wise.d03.com/public/js"
+
+        ...
+</VirtualHost>
+
+```
+
+![13](https://user-images.githubusercontent.com/64743796/199224176-5decc9d6-f4c9-49ac-9f01-8dcb5365e49b.png)
+
