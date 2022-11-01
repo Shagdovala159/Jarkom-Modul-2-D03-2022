@@ -421,17 +421,22 @@ Lakukan ping ke domain strix.operation.wise.d03.com dan www.strix.operation.wise
 
 ![Screenshot 2022-10-26 035549](https://user-images.githubusercontent.com/64743796/198032744-6dd40343-2ea6-4728-a324-0dc466f7ecab.png)
 
-
 ## 11
-
-> Akan tetapi, pada folder /public, Loid ingin hanya dapat melakukan directory listing saja
-
-- akses folder webserver pada skypie dan lakukan pengeditan
-- menambah directory dan option +indexes
-
-```shell
+> Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder /error untuk mengganti error kode pada apache
+Pada node eden edit eden.wise.d03.com.conf menjadi seperti dibawah ini:
+```
+echo "
 <VirtualHost *:80>
-        ...
+        ServerName eden.wise.d03.com
+        ServerAlias www.eden.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.d03.com
+
+        <Directory /var/www/eden.wise.d03.com>
+                Options +Indexes
+                AllowOverride All
+        </Directory>
 
         <Directory /var/www/eden.wise.d03.com/public>
                 Options +Indexes
@@ -440,57 +445,367 @@ Lakukan ping ke domain strix.operation.wise.d03.com dan www.strix.operation.wise
         ErrorLog ${APACHE_LOG_DIR}/error.log
         CustomLog ${APACHE_LOG_DIR}/access.log combined
 
-        ...
 </VirtualHost>
-
+" > /etc/apache2/sites-available/eden.wise.d03.com.conf
+```  
+enable sitenya  
 ```
-
-`lynx http://www.eden.wise.d03.com/public`
-
-![Screenshot 2022-10-26 035550](https://user-images.githubusercontent.com/64743796/199222917-c8c808a4-d8bd-4cc4-a3d6-b9490c961095.png)
-
+a2ensite eden.wise.d03.com
+```  
+bikin direktori dan copykan isinya
+```
+mkdir /var/www/eden.wise.d03.com
+cp -r /root/modul2source/eden.wise/. /var/www/eden.wise.d03.com
+```  
+restart  
+```
+service apache2 restart
+```
+echo terserah  
+```
+echo "<?php echo 'wina vania cantik' ?>" > /var/www/eden.wise.d03.com/index.php  
+```
+Coba lynx
+```
+lynx http://www.eden.wise.d03.com/public
+```
+![11](https://user-images.githubusercontent.com/57696730/199226636-46c61cde-93a6-48fe-befe-2274afef9dd2.png)  
 
 ## 12
+> Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset www.eden.wise.yyy.com/public/js menjadi www.eden.wise.yyy.com/js  
 
-> Tidak hanya itu, Loid juga ingin menyiapkan error file 404.html pada folder /error untuk mengganti error kode pada apache
-
-- akses folder webserver pada skypie dan lakukan pengeditan
-- menambah custom error document
-
-```shell
-<VirtualHost *:80>
-        ...
-        
-        ErrorDocument 404 /error/404.html
-
-        ...
-</VirtualHost>
-
+Pada node eden edit eden.wise.d03.com.conf menjadi seperti dibawha ini:
 ```
+echo "
+<VirtualHost *:80>
+        ServerName eden.wise.d03.com
+        ServerAlias www.eden.wise.d03.com
 
-`lynx http://www.eden.wise.d03.com/errorgakya`
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.d03.com
 
-![Screenshot 2022-10-26 035551](https://user-images.githubusercontent.com/64743796/199223681-2a6bdb6e-d672-40f8-a679-fdc19516156f.png)
+        <Directory /var/www/eden.wise.d03.com>
+                Options +Indexes
+                AllowOverride All
+        </Directory>
+
+        <Directory /var/www/eden.wise.d03.com/public>
+                Options +Indexes
+        </Directory>
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ErrorDocument 404 /error/404.html
+</VirtualHost>
+" > /etc/apache2/sites-available/eden.wise.d03.com.conf  
+```
+lalu restart  
+```service apache2 restart```  
+lalu lynx http://www.eden.wise.d03.com/antonjelek
+![12](https://user-images.githubusercontent.com/57696730/199226700-ac3f1119-49e1-4ecf-a934-8b1dd555a9b3.png)  
 
 
 ## 13
+> Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses file asset www.eden.wise.yyy.com/public/js menjadi www.eden.wise.yyy.com/js
 
-> Loid juga meminta Franky untuk dibuatkan konfigurasi virtual host. Virtual host ini bertujuan untuk dapat mengakses 
-file asset `www.eden.wise.yyy.com/public/js` menjadi `www.eden.wise.yyy.com/js`
-
-- akses folder webserver pada skypie dan lakukan pengeditan
-- menambahkan alias
-
-```shell
+Pada node eden edit eden.wise.d03.com.conf menjadi seperti dibawha ini:
+```
+echo "
 <VirtualHost *:80>
-        ...
-        
+        ServerName eden.wise.d03.com
+        ServerAlias www.eden.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.d03.com
+
+        <Directory /var/www/eden.wise.d03.com>
+                Options +Indexes
+                AllowOverride All
+        </Directory>
+
+        <Directory /var/www/eden.wise.d03.com/public>
+                Options +Indexes
+        </Directory>
+
         Alias "/js" "/var/www/eden.wise.d03.com/public/js"
 
-        ...
-</VirtualHost>
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
 
+        ErrorDocument 404 /error/404.html
+</VirtualHost>
+" > /etc/apache2/sites-available/eden.wise.d03.com.conf
+```
+lalu restart  
+```service apache2 restart```  
+Coba lynx  
+```lalu lynx http://www.eden.wise.d03.com/js```
+![13](https://user-images.githubusercontent.com/57696730/199226770-56418263-0ae5-4413-9b0f-3f86c8263634.png)
+
+
+
+## 14
+> Loid meminta agar www.strix.operation.wise.yyy.com hanya bisa diakses dengan port 15000 dan port 15500
+
+Membuat konfigurasi Web Server di default-wise-1-15000.conf dan default-wise-1-15500.conf sebagai berikut.
+
+### default-wise-1-15000.conf  
+```
+<VirtualHost *:15000>
+        ServerName strix.operation.wise.d03.com
+        ServerAlias www.strix.operation.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.d03.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
 ```
 
-![13](https://user-images.githubusercontent.com/64743796/199224176-5decc9d6-f4c9-49ac-9f01-8dcb5365e49b.png)
+### default-wise-1-15500.conf  
+```
+<VirtualHost *:15500>
+        ServerName strix.operation.wise.d03.com
+        ServerAlias www.strix.operation.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.d03.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```
+Kemudian copy file dengan command   
+```
+cp /root/default-wise-1-15000.conf /etc/apache2/sites-available/strix.operation.wise.d03.com-15000.conf
+cp /root/default-wise-1-15500.conf /etc/apache2/sites-available/strix.operation.wise.d03.com-15000.conf
+```  
+
+Tambahkan port yang akan di listen pada ports-1.conf sebagi berikut.
+```
+Listen 80
+Listen 15000
+Listen 15500
+
+<IfModule ssl_module>
+        Listen 443
+</IfModule>
+
+<IfModule mod_gnutls.c>
+        Listen 443
+</IfModule>
+```
+Kemudian copi file ```cp /root/ports-1.conf /etc/apache2/ports.conf.```
+
+Kemudian aktifkan a2ensite dengan   
+```
+a2ensite strix.operation.wise.d03.com-15000
+a2ensite strix.operation.wise.d03.com-15500
+```
+
+Lakukan pembuatan direktori baru dengan  
+```mkdir /var/www/strix.operation.wise.d03.com```
+
+Copy file - file lampiran github ke folder yang telah dibuat  
+```
+cp -r /root/modul2source-jarkom/strix.operation.wise/. /var/www/strix.operation.wise.d03.com.
+```
+
+Restart apache 
+```
+service apache2 restart.
+```
+
+Pada node Garden dan SSS, kita dapat melakukan testing dengan menggunakan lynx pada port 15000 atau 15500  
+```
+lynx http://www.strix.operation.wise.d03.com:15000 atau lynx http://www.strix.operation.wise.d03.com:15500.
+```
+![14b](https://user-images.githubusercontent.com/57696730/199226292-6b7a2df6-2f20-4566-87b6-7ab08f6a58ee.png)  
+![14a](https://user-images.githubusercontent.com/57696730/199226298-4aef1755-4308-481f-bdbc-8cb41675c20d.png)  
+
+
+
+
+## 15
+> Dengan autentikasi username Twilight dan password opStrix dan file di /var/www/strix.operation.wise.yyy
+
+Pada node Eden  
+
+Tambahkan code baru berikut pada ```file default-wise-2-15000.conf``` dan ```default-wise-2-15500.conf``` sebagai berikut.  
+
+### default-wise-2-15000.conf
+```
+<VirtualHost *:15000>
+        ServerName strix.operation.wise.d03.com
+        ServerAlias www.strix.operation.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.d03.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        <Directory "var/www/strix.operation.wise.d03.com">
+                AuthType Basic
+                AuthName "Restricted Content"
+                AuthUserFile /etc/apache2/.htpasswd
+                Require valid-user
+        </Directory>
+</VirtualHost>
+```
+
+### default-wise-2-15500.conf  
+```
+<VirtualHost *:15500>
+        ServerName strix.operation.wise.d03.com
+        ServerAlias www.strix.operation.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/strix.operation.wise.d03.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        <Directory "var/www/strix.operation.wise.d03.com">
+                AuthType Basic
+                AuthName "Restricted Content"
+                AuthUserFile /etc/apache2/.htpasswd
+                Require valid-user
+        </Directory>
+</VirtualHost>
+```
+
+Copy file dengan command 
+```
+cp /root/default-wise-2-15000.conf /etc/apache2/sites-available/strix.operation.wise.d03.com-15000
+cp /root/default-wise-2-15500.conf /etc/apache2/sites-available/strix.operation.wise.d03.com-15500
+```
+
+Kemudian buat autentikasi baru dengan command berikut sehingga memunculkan file ```.htpasswd``` pada dengan command 
+```
+htpasswd -b -c /etc/apache2/.htpasswd Twilight opStrix.
+```
+
+Restart apache   
+```service apache2 restart.```  
+
+Ketika web server ```strix.operation.wise.d03.com``` diakses, akan diminta authentikasi username dan password.  
+![15a](https://user-images.githubusercontent.com/57696730/199225992-cd64e4b8-e0a4-4459-9804-6525db8eff47.png)  
+![15b](https://user-images.githubusercontent.com/57696730/199226015-3764ad89-26a2-484a-8e0d-bc1b263cfadd.png)  
+
+Input username Twilight dan password opStrix.
+![15c](https://user-images.githubusercontent.com/57696730/199226127-d8342a97-4d30-4876-ad70-2b4cc5a94602.png)
+
+Kemudian akan menampilkan hasil berikut.
+![15d](https://user-images.githubusercontent.com/57696730/199226157-f75ac658-0d7b-4f1a-842f-6b9516208168.png)
+
+
+## 16
+> dan setiap kali mengakses IP Eden akan dialihkan secara otomatis ke ```www.wise.yyy.com```
+
+Pada node Eden
+
+Konfigurasi pada file ```default-1.conf``` sebagai berikut.
+``` shell
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/wise.d03.com
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+```  
+Copy file tersebut dengan command   
+```cp /root/default-1.conf /etc/apache2/sites-available/000-default.conf```
+
+
+Konfigurasi pada file ```wise-1.htaccess``` sebagai berikut.  
+```shell
+a2enmod rewrite
+RewriteEngine On
+RewriteBase /
+RewriteCond %{HTTP_HOST} ^192\.186\.2\.3$
+RewriteRule ^(.*)$ http://www.wise.d03.com/$1 [L,R=301]
+``` 
+Inti dari konfigurasi tersebut adalah kita melakukan cek apakah pengaksesan berupa ip ke arah Eden jika hal tersebut terpenuhi maka kita membuat rule untuk melakukan direct ke ```www.wise.d03.com.```  
+
+Kemudian copy file dengan command 
+```
+cp /root/wise-1.htaccess /var/www/wise.d03.com/.htaccess.
+```
+
+Restart apache 
+```
+service apache2 restart.
+```
+
+Testing pada node Garden dan SSS dengan command ```lynx 192.186.2.3```
+![16](https://user-images.githubusercontent.com/57696730/199225900-f72f2d4e-933a-4cd3-a734-cafe699272a0.png)
+
+## 17
+> Karena website www.eden.wise.yyy.com semakin banyak pengunjung dan banyak modifikasi sehingga banyak gambar-gambar yang random, maka Loid ingin mengubah request gambar yang memiliki substring “eden” akan diarahkan menuju eden.png. Bantulah Agent Twilight dan Organisasi WISE menjaga perdamaian!
+
+Pada node Eden
+
+Konfigurasi pada ```file wise-2.htaccess``` sebagai berikut.  
+```
+a2enmod rewrite
+ewriteEngine On
+RewriteBase /
+RewriteCond %{REQUEST_URI} !\beden.png\b
+RewriteRule eden http://eden.wise.d03.com/public/images/eden.png$1 [L,R=301]
+```  
+Inti dari konfigurasi tersebut adalah kita melakukan cek apakah request mengandung substring eden, jika ya maka akan diarahkan ke ```http://eden.wise.d03.com/public/images/eden.png.```
+
+Copy file dengan command
+```
+cp /root/wise-2.htaccess /var/www/eden.wise.d03.com/.htaccess.
+```  
+
+Konfigurasi pada ```file default-wise-7.conf``` sebagai berikut.  
+```
+<VirtualHost *:80>
+        ServerName eden.wise.d03.com
+        ServerAlias www.eden.wise.d03.com
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/eden.wise.d03.com
+
+        <Directory /var/www/eden.wise.d03.com>
+                Options +Indexes
+                AllowOverride All
+        </Directory>
+
+        <Directory /var/www/eden.wise.d03.com/public>
+                Options +Indexes
+        </Directory>
+
+        Alias "/js" "/var/www/eden.wise.d03.com/public/js"
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        ErrorDocument 404 /error/404.html
+</VirtualHost>
+```
+Copy file dengan command 
+```
+cp /root/default-wise-7.conf /etc/apache2/sites-available/eden.wise.d03.com.conf.
+```
+
+Restart apache   
+```
+service apache2 restart.
+```
+
+Testing pada node Garden dan SSS dengan command 
+```lynx www.eden.wise.d03.com/public/images/abcedendef```  
+maka akan muncul tampilan berikut.  
+![17](https://user-images.githubusercontent.com/57696730/199225830-c06c2d9e-3e21-4deb-806f-9bb54c3c906f.png)
+
+
+
+
 
